@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(222.2 84% 4.9%);
+
+  --color-krishna-blue: #1e1b4b;
+  --color-peacock-teal: #115e59;
+  --color-pitambar-yellow: #f59e0b;
+  --color-pitambar-light: #fbbf24;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
