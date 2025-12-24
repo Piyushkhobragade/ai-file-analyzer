@@ -8,12 +8,6 @@ import { analyzeWithGemini } from '@/services/aiService';
  * Handles file uploads and triggers the Gemini AI analysis.
  */
 
-export const config = {
-    api: {
-        bodyParser: false,
-    },
-};
-
 export async function POST(req: NextRequest) {
     try {
         console.log('[API] Received analysis request');
