@@ -18,22 +18,64 @@ export interface AnalysisResult {
 // Ensure GEMINI_API_KEY is set in your .env.local file
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
+// Prompts for different detail levels
+const PROMPTS = {
+    quick: `
+      Analyze this document/image quickly and provide a brief structured JSON response.
+      
+      Return ONLY raw JSON (no markdown code blocks) with the following schema:
+      {
+        "summary": "A very brief summary (1 sentence)",
+        "keywords": ["3", "key", "topics"],
+        "sentiment": "Positive" | "Neutral" | "Negative",
+        "confidence": number (0.0 to 1.0)
+      }
+    `,
+    standard: `
+      Analyze this document/image and provide a structured JSON response.
+      
+      Return ONLY raw JSON (no markdown code blocks) with the following schema:
+      {
+        "summary": "A concise summary of the content (max 3 sentences)",
+        "keywords": ["Array", "of", "5", "key", "topics"],
+        "sentiment": "Positive" | "Neutral" | "Negative",
+        "confidence": number (0.0 to 1.0 indicating confidence in analysis)
+      }
+    `,
+    detailed: `
+      Analyze this document/image in detail and provide a comprehensive structured JSON response.
+      
+      Return ONLY raw JSON (no markdown code blocks) with the following schema:
+      {
+        "summary": "A detailed summary of the content (5-7 sentences covering main points)",
+        "keywords": ["Array", "of", "8-10", "key", "topics", "and", "themes"],
+        "sentiment": "Positive" | "Neutral" | "Negative",
+        "confidence": number (0.0 to 1.0 indicating confidence in analysis)
+      }
+    `
+};
+
 /**
  * Analyzes a file using Gemini AI.
  * 
  * @param fileBuffer - The file content as a Buffer
  * @param mimeType - The MIME type of the file (e.g., 'application/pdf', 'image/png')
+ * @param detailLevel - The level of detail for analysis ('quick', 'standard', or 'detailed')
  * @returns Promise<AnalysisResult>
  */
-export async function analyzeWithGemini(fileBuffer: Buffer, mimeType: string): Promise<AnalysisResult> {
+export async function analyzeWithGemini(
+    fileBuffer: Buffer,
+    mimeType: string,
+    detailLevel: 'quick' | 'standard' | 'detailed' = 'standard'
+): Promise<AnalysisResult> {
     if (!process.env.GEMINI_API_KEY) {
         throw new Error("GEMINI_API_KEY is not set in environment variables.");
     }
 
     try {
-        console.log(`[Gemini] Starting analysis for file type: ${mimeType}`);
+        console.log(`[Gemini] Starting ${detailLevel} analysis for file type: ${mimeType}`);
 
-        // Use Gemini 2.0 Flash (available for this key)
+        // Use Gemini 2.0 Flash
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
         // Convert Buffer to Base64 for Gemini
@@ -44,17 +86,7 @@ export async function analyzeWithGemini(fileBuffer: Buffer, mimeType: string): P
             },
         };
 
-        const prompt = `
-      Analyze this document/image and provide a structured JSON response.
-      
-      Return ONLY raw JSON (no markdown code blocks) with the following schema:
-      {
-        "summary": "A concise summary of the content (max 3 sentences)",
-        "keywords": ["Array", "of", "5", "key", "topics"],
-        "sentiment": "Positive" | "Neutral" | "Negative",
-        "confidence": number (0.0 to 1.0 indicating confidence in analysis)
-      }
-    `;
+        const prompt = PROMPTS[detailLevel];
 
         const result = await model.generateContent([prompt, filePart]);
         const response = await result.response;
@@ -75,5 +107,5 @@ export async function analyzeWithGemini(fileBuffer: Buffer, mimeType: string): P
     }
 }
 
-// Backward compatibility alias if needed, or just use analyzeWithGemini directly
+// Backward compatibility alias
 export const analyzeFile = (fileBuffer: Buffer, fileName: string, fileType: string) => analyzeWithGemini(fileBuffer, fileType);

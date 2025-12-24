@@ -1,14 +1,11 @@
 import React from 'react';
-import { CheckCircle2, AlertCircle, Sparkles, Tag, BarChart3, Download } from 'lucide-react';
+import { Sparkles, Tag, BarChart3, Download } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Badge } from './ui/Badge';
 import { generatePDF } from '@/lib/pdfGenerator';
-
-interface AnalysisData {
-    summary: string;
-    keywords: string[];
-    sentiment: 'Positive' | 'Neutral' | 'Negative';
-    confidence: number;
-}
+import { content } from '@/config/content.config';
+import { formatConfidence } from '@/lib/utils/formatters';
+import type { AnalysisData } from '@/types/analysis.types';
 
 interface AnalysisResultProps {
     data: AnalysisData;
@@ -54,12 +51,9 @@ export function AnalysisResult({ data, fileName }: AnalysisResultProps) {
                     </h4>
                     <div className="flex flex-wrap gap-2">
                         {data.keywords.map((keyword, idx) => (
-                            <span
-                                key={idx}
-                                className="px-3 py-1 bg-pitambar-yellow/10 border border-pitambar-yellow/40 text-pitambar-yellow text-xs font-medium rounded-full shadow-[0_0_10px_rgba(245,158,11,0.1)]"
-                            >
+                            <Badge key={idx} variant="gold">
                                 {keyword}
-                            </span>
+                            </Badge>
                         ))}
                     </div>
                 </div>
@@ -79,10 +73,10 @@ export function AnalysisResult({ data, fileName }: AnalysisResultProps) {
                     </div>
 
                     <div className="space-y-1">
-                        <h4 className="text-xs font-medium text-gray-500 uppercase">Confidence</h4>
+                        <h4 className="text-xs font-medium text-gray-500 uppercase">{content.results.sections.confidence}</h4>
                         <div className="flex items-center gap-2">
                             <BarChart3 className="w-4 h-4 text-pitambar-yellow" />
-                            <span className="text-sm font-semibold text-white">{(data.confidence * 100).toFixed(0)}%</span>
+                            <span className="text-sm font-semibold text-white">{formatConfidence(data.confidence)}</span>
                         </div>
                     </div>
                 </div>

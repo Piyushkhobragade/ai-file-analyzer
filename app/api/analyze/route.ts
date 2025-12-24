@@ -20,24 +20,24 @@ export async function POST(req: NextRequest) {
 
         const formData = await req.formData();
         const file = formData.get('file') as File | null;
+        const detailLevel = (formData.get('detailLevel') as string) || 'standard';
 
         if (!file) {
             return NextResponse.json({ success: false, error: 'No file uploaded' }, { status: 400 });
         }
 
-        // Validate file size (Max 5MB)
-        if (file.size > 5 * 1024 * 1024) {
-            return NextResponse.json({ success: false, error: 'File size exceeds 5MB limit' }, { status: 400 });
+        // Validate file size (Max 10MB)
+        if (file.size > 10 * 1024 * 1024) {
+            return NextResponse.json({ success: false, error: 'File size exceeds 10MB limit' }, { status: 400 });
         }
 
-        console.log(`[API] Processing file: ${file.name}, Type: ${file.type}`);
+        console.log(`[API] Processing file: ${file.name}, Type: ${file.type}, Detail: ${detailLevel}`);
 
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
 
-        // Call Gemini Service
-        // Note: We pass the buffer and mimeType directly
-        const analysisResult = await analyzeWithGemini(buffer, file.type);
+        // Call Gemini Service with detail level
+        const analysisResult = await analyzeWithGemini(buffer, file.type, detailLevel as 'quick' | 'standard' | 'detailed');
 
         return NextResponse.json({
             success: true,

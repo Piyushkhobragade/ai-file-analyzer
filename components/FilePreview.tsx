@@ -1,8 +1,9 @@
 "use client";
 
 import React from 'react';
-import { File, X, FileText, Image as ImageIcon, Film, Music } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { X, FileText, Image as ImageIcon } from 'lucide-react';
+import { formatFileSize } from '@/lib/utils/formatters';
+import { useSettings } from '@/lib/context/SettingsContext';
 
 interface FilePreviewProps {
     files: File[];
@@ -10,27 +11,22 @@ interface FilePreviewProps {
 }
 
 export function FilePreview({ files, onRemove }: FilePreviewProps) {
+    const { t } = useSettings();
+
     if (files.length === 0) return null;
 
-    const formatFileSize = (bytes: number) => {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    };
-
+    // Helper to get appropriate icon based on file type
     const getFileIcon = (type: string) => {
-        if (type.startsWith('image/')) return <ImageIcon className="w-5 h-5 text-purple-400" />;
-        if (type.startsWith('video/')) return <Film className="w-5 h-5 text-pink-400" />;
-        if (type.startsWith('audio/')) return <Music className="w-5 h-5 text-pitambar-yellow" />;
+        if (type.startsWith('image/')) {
+            return <ImageIcon className="w-5 h-5 text-purple-400" />;
+        }
         return <FileText className="w-5 h-5 text-peacock-teal" />;
     };
 
     return (
         <div className="w-full space-y-3 mt-6">
             <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-gray-200">Uploaded Files</h3>
+                <h3 className="text-sm font-medium text-gray-200">{t.upload.preview.files}</h3>
                 <span className="text-xs text-gray-400">{files.length} files</span>
             </div>
             <div className="space-y-2 max-h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
@@ -55,7 +51,7 @@ export function FilePreview({ files, onRemove }: FilePreviewProps) {
                         <button
                             onClick={() => onRemove(index)}
                             className="p-1.5 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-                            aria-label="Remove file"
+                            aria-label={t.upload.preview.remove}
                         >
                             <X className="w-4 h-4" />
                         </button>

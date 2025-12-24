@@ -1,40 +1,100 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI File Analyzer
+
+A file analysis tool I built using Google's Gemini 2.0 AI. Upload your documents and images to get instant analysis with summaries, keywords, and sentiment detection.
+
+## What it does
+
+This app lets you upload files (PDF, DOCX, images) and analyzes them using AI. I added some cool features like:
+
+- Multi-format support (PDF, DOCX, PNG, JPG)
+- Three analysis modes - quick, standard, or detailed depending on what you need
+- Auto-analyze option so files get processed right after upload
+- Multi-language UI (English, Spanish, Hindi, Marathi, Tamil, Telugu, Bengali)
+- Custom theme with particle effects in the background
+- Settings that persist across sessions
 
 ## Getting Started
 
-First, run the development server:
+First, clone the repo and install dependencies:
+
+```bash
+npm install
+```
+
+You'll need a Gemini API key. Get one from [Google AI Studio](https://makersuite.google.com/app/apikey), then create a `.env.local` file:
+
+```env
+GEMINI_API_KEY=your_api_key_here
+```
+
+Run the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 and you're good to go.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How I built it
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Tech stack:**
+- Next.js 16 with the new App Router
+- TypeScript for type safety
+- Tailwind CSS v4 for styling
+- Google Gemini 2.0 Flash for the AI analysis
+- Lucide React for icons
 
-## Learn More
+**Project structure:**
 
-To learn more about Next.js, take a look at the following resources:
+```
+ai-file-analyzer/
+├── app/              # Next.js pages and API routes
+├── components/       # React components
+├── config/           # App configuration
+├── lib/              # Utilities and custom hooks
+├── services/         # Gemini AI integration
+└── types/            # TypeScript types
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Settings
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Click the settings icon to configure:
+- Auto-analyze toggle
+- Analysis detail level (quick/standard/detailed)
+- Language preference
 
-## Deploy on Vercel
+## Building for production
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run build
+npm start
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# ai-file-analyzer
->>>>>>> 2748905d2156637a30feee5b9fa4990357734009
+## What's next
+
+Some things I'm thinking about adding:
+- Excel and CSV support
+- Batch processing for multiple files
+- PDF export for analysis results
+- History of past analyses
+- Custom prompt templates
+
+## Contributing
+
+If you find bugs or have ideas, feel free to open an issue or PR.
+
+## License
+
+MIT
+
+## About
+
+Built by Piyush Khobragade
+
+- GitHub: [@Piyushkhobragade](https://github.com/Piyushkhobragade)
+- LinkedIn: [Piyush Khobragade](https://www.linkedin.com/in/piyush-khobragade-934a15223/)
+- Email: piyushkhobragade2005@gmail.com
+
+---
+
+Made with Next.js and Google Gemini AI

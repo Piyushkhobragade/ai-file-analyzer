@@ -1,16 +1,35 @@
 @import "tailwindcss";
 
 @theme {
+  /* Base colors */
   --color-background: hsl(0 0% 100%);
   --color-foreground: hsl(222.2 84% 4.9%);
 
-  --color-krishna-blue: #1e1b4b;
+  /* Krishna theme colors */
+  --color-krishna-blue: #1e3a8a;
   --color-peacock-teal: #115e59;
+  --color-peacock-teal-light: #2dd4bf;
   --color-pitambar-yellow: #f59e0b;
-  --color-pitambar-light: #fbbf24;
+  --color-pitambar-light: #facc15;
 }
 
 @layer base {
+
+  /* Dark mode (default) */
+  :root.dark {
+    --color-background: hsl(222.2 84% 4.9%);
+    --color-foreground: hsl(210 40% 98%);
+  }
+
+  /* Light mode */
+  :root.light {
+    --color-background: hsl(0 0% 100%);
+    --color-foreground: hsl(222.2 84% 4.9%);
+    --color-krishna-blue: #1e40af;
+    --color-peacock-teal: #0d9488;
+    --color-peacock-teal-light: #14b8a6;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;

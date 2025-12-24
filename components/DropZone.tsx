@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useCallback, useRef } from 'react';
-import { Upload, File, X } from 'lucide-react';
+import { Upload } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useSettings } from '@/lib/context/SettingsContext';
+import { appConfig } from '@/config/app.config';
 
 interface DropZoneProps {
   onFilesSelected: (files: File[]) => void;
@@ -11,6 +13,7 @@ interface DropZoneProps {
 export function DropZone({ onFilesSelected }: DropZoneProps) {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { t } = useSettings();
 
   const handleDragEnter = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -75,21 +78,24 @@ export function DropZone({ onFilesSelected }: DropZoneProps) {
         onChange={handleFileInput}
         className="hidden"
         multiple
+        accept={appConfig.upload.allowedExtensions.join(',')}
       />
 
       <div className="flex flex-col items-center justify-center space-y-4 text-center p-6">
         <div className={cn(
           "p-4 rounded-full transition-colors duration-300 shadow-lg",
-          isDragging ? "bg-peacock-teal/20 text-peacock-teal" : "bg-white/5 text-gray-400 group-hover:bg-pitambar-yellow/10 group-hover:text-pitambar-yellow"
+          isDragging
+            ? "bg-peacock-teal/20 text-peacock-teal"
+            : "bg-white/5 text-gray-400 group-hover:bg-pitambar-yellow/10 group-hover:text-pitambar-yellow"
         )}>
           <Upload className="w-8 h-8" />
         </div>
         <div className="space-y-1">
           <p className="text-sm font-medium text-gray-200 group-hover:text-white transition-colors">
-            Click to upload or drag and drop
+            {isDragging ? t.upload.dropzone.title : t.upload.dropzone.subtitle}
           </p>
           <p className="text-xs text-gray-400">
-            SVG, PNG, JPG or GIF (max. 800x400px)
+            {t.upload.dropzone.formats}
           </p>
         </div>
       </div>
