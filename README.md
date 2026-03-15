@@ -83,10 +83,6 @@ Some things I'm thinking about adding:
 
 If you find bugs or have ideas, feel free to open an issue or PR.
 
-## License
-
-MIT
-
 ## About
 
 Built by Piyush Khobragade
